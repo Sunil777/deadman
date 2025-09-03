@@ -90,8 +90,8 @@ In the Alertmanager cluster, add a route to send webhook notifications to the de
 
 ```yaml
 - receiver: deadmans-switch
-  group_wait: 0s
-  group_interval: 0s
+  group_wait: 1s
+  group_interval: 1s
   repeat_interval: 15s
   match:
     severity: deadman
