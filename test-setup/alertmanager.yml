@@ -1,0 +1,23 @@
+route:
+  receiver: default-receiver        # root default receiver for unmatched alerts
+  group_wait: 1s
+  group_interval: 1s
+  repeat_interval: 15s
+  routes:
+    - receiver: deadmans-switch
+      match:
+        severity: deadman
+      group_wait: 1s
+      group_interval: 1s
+      repeat_interval: 15s
+
+receivers:
+  - name: default-receiver
+    # For example, send unmatched alerts to Slack or just log somewhere
+    webhook_configs:
+      - url: http://example-webhook:9091
+
+  - name: deadmans-switch
+    webhook_configs:
+      - url: http://deadman:9095
+

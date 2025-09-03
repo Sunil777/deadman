@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./rules.yml:/etc/prometheus/rules.yml:ro
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring
+
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    container_name: alertmanager
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    command:
+      - --config.file=/etc/alertmanager/alertmanager.yml
+    ports:
+      - "9093:9093"
+    networks:
+      - monitoring
+
+  deadman:
+    build: ..
+    container_name: deadman
+    command:
+      - --am.url=http://alertmanager:9093/api/v2/alerts
+      - --deadman.interval=30s
+      - --log.level=debug
+    ports:
+      - "9095:9095"
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    driver: bridge
+

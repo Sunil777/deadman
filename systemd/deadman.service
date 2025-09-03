@@ -1,0 +1,24 @@
+[Unit]
+Description=Deadman Snitch for Prometheus Alertmanager
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/deadman \
+  --am.url="http://localhost:9093/api/v2/alerts" \
+  --deadman.interval=30s \
+  --log.level=info
+
+# Restart policy
+Restart=on-failure
+RestartSec=5
+
+# Run as non-root (change if needed)
+User=deadman
+Group=deadman
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

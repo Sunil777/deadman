@@ -1,0 +1,11 @@
+groups:
+  - name: deadman
+    interval: 30s
+    rules:
+      - alert: DeadManBoy
+        expr: vector(1)
+        labels:
+          severity: deadman
+        annotations:
+          description: "This is a DeadMansSwitch alert to ensure the alerting pipeline is functional."
+
